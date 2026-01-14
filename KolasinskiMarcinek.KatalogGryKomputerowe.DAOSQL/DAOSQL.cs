@@ -15,8 +15,34 @@ public class DAOSQL : DbContext, IDAO
     public DAOSQL(IConfiguration configuration)
     {
         _configuration = configuration;
+        Database.EnsureCreated();
+
+        if (!producers.Any())
+        {
+            SeedData();
+        }
     }
+
     public DAOSQL() { }
+
+    private void SeedData()
+    {
+        var p1 = new ProducerDb { Name = "Bethesda", Address = "USA" };
+        producers.Add(p1);
+        SaveChanges();
+
+        games.Add(
+            new GameDb
+            {
+                Name = "Skyrim",
+                producerId = p1.Id,
+                ReleaseYear = 2011,
+                Genre = CORE.GameGenre.RPG,
+            }
+        );
+
+        SaveChanges();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
@@ -90,16 +116,17 @@ public class DAOSQL : DbContext, IDAO
 
     public void UpdateGame(IGame game)
     {
-        var newGame = games.FirstOrDefault(g => g.Id.Equals(game.Id));
+        var existingGame = games.FirstOrDefault(g => g.Id == game.Id);
+        if (existingGame != null)
+        {
+            existingGame.Name = game.Name;
+            existingGame.ReleaseYear = game.ReleaseYear;
+            existingGame.Multiplayer = game.Multiplayer;
+            existingGame.Genre = game.Genre;
+            existingGame.producerId = game.Producer.Id;
 
-        newGame.Name = game.Name;
-        newGame.producerId = game.Producer.Id;
-        newGame.ReleaseYear = game.ReleaseYear;
-        newGame.Multiplayer = game.Multiplayer;
-        newGame.Genre = game.Genre;
-
-        Entry(newGame).CurrentValues.SetValues(newGame);
-        SaveChanges();
+            SaveChanges();
+        }
     }
 
     public void UpdateProducer(IProducer producer)

@@ -1,0 +1,19 @@
+@model KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.IGame
+
+<h1>Usuń grę</h1>
+<h3>Czy na pewno chcesz usunąć tę grę?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Nazwa</dt>
+        <dd class="col-sm-10">@Model.Name</dd>
+        <dt class="col-sm-2">Producent</dt>
+        <dd class="col-sm-10">@Model.Producer.Name</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Usuń" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Powrót</a>
+    </form>
+</div>

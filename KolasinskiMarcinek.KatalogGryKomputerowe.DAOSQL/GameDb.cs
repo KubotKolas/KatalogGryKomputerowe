@@ -15,10 +15,12 @@ public class GameDb
     public GameGenre Genre { get; set; }
 
     public IGame ToIGame(List<ProducerDb> producers){
+        var foundProducer = producers.FirstOrDefault(p => p.Id == producerId);
+
         return new Game(){
             Id = Id,
             Name = Name,
-            Producer = producers.Single(p => p.Id.Equals(producerId)).ToIProducer(),
+            Producer = foundProducer?.ToIProducer() ?? new ProducerDb.Producer { Name = "Nieznany" },
             ReleaseYear = ReleaseYear,
             Multiplayer = Multiplayer,
             Genre = Genre
