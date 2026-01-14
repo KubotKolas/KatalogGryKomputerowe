@@ -1,0 +1,18 @@
+[
+  {
+    "Id": 1,
+    "Name": "Wiedźmin 3: Dziki Gon",
+    "ProducerId": 1,
+    "ReleaseYear": 2015,
+    "Multiplayer": false,
+    "Genre": 1
+  },
+  {
+    "Id": 2,
+    "Name": "Elden Ring",
+    "ProducerId": 2,
+    "ReleaseYear": 2022,
+    "Multiplayer": true,
+    "Genre": 1
+  }
+]

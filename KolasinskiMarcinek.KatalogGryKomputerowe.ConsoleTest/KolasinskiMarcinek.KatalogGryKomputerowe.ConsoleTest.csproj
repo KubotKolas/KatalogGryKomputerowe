@@ -12,11 +12,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+  </ItemGroup>
+
   <Target Name="CopyDAOLibraries" AfterTargets="Build">
     <ItemGroup>
       <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock/bin/$(Configuration)/net9.0/*.dll" />
       <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL/bin/$(Configuration)/net9.0/*.dll" />
       <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOFile/bin/$(Configuration)/net9.0/*.dll" />
+      <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOFile/bin/$(Configuration)/net9.0/*.json" />
     </ItemGroup>
 
     <PropertyGroup>

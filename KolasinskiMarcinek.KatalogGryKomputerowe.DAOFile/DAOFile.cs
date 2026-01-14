@@ -6,12 +6,19 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.DAOFile;
 
 public class DAOFile : IDAO
 {
-    private readonly string _gamesPath = "games.json";
-    private readonly string _producersPath = "producers.json";
+    private readonly string _gamesPath;
+    private readonly string _producersPath;
 
-    public DAOFile(IConfiguration configuration) { }
+    public DAOFile(IConfiguration configuration)
+        : this() { }
 
-    public DAOFile() { }
+    public DAOFile()
+    {
+        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+        _gamesPath = Path.Combine(baseDir, "games.json");
+        _producersPath = Path.Combine(baseDir, "producers.json");
+    }
 
     private List<T> Load<T>(string path)
         where T : new()

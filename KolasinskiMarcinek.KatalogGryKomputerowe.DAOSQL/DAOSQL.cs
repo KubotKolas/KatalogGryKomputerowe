@@ -60,50 +60,51 @@ public class DAOSQL : DbContext, IDAO
 
     public IGame CreateNewGame(IGame game)
     {
-        Add(
-            new GameDb()
-            {
-                Id = game.Id,
-                Name = game.Name,
-                producerId = game.Producer.Id,
-                ReleaseYear = game.ReleaseYear,
-                Multiplayer = game.Multiplayer,
-                Genre = game.Genre,
-            }
-        );
+        var dbEntry = new GameDb()
+        {
+            Name = game.Name,
+            producerId = game.Producer.Id,
+            ReleaseYear = game.ReleaseYear,
+            Multiplayer = game.Multiplayer,
+            Genre = game.Genre,
+        };
+        games.Add(dbEntry);
         SaveChanges();
+
+        game.Id = dbEntry.Id;
         return game;
     }
 
     public IProducer CreateNewProducer(IProducer producer)
     {
-        Add(
-            new ProducerDb()
-            {
-                Id = producer.Id,
-                Name = producer.Name,
-                Address = producer.Address,
-            }
-        );
+        var dbEntry = new ProducerDb() { Name = producer.Name, Address = producer.Address };
+        producers.Add(dbEntry);
         SaveChanges();
+
+        producer.Id = dbEntry.Id;
         return producer;
     }
 
     public void DeleteGame(int gameId)
     {
         var gameToDelete = games.FirstOrDefault(g => g.Id.Equals(gameId));
-        Remove(gameToDelete);
-        SaveChanges();
+        if (gameToDelete != null)
+        {
+            games.Remove(gameToDelete);
+            SaveChanges();
+        }
     }
 
     public void DeleteProducer(int producerId)
     {
         var prodToDelete = producers.FirstOrDefault(p => p.Id.Equals(producerId));
-        Remove(prodToDelete);
-        SaveChanges();
+        if (prodToDelete != null)
+        {
+            producers.Remove(prodToDelete);
+            SaveChanges();
+        }
     }
 
-    // TODO: doublecheck
     public IEnumerable<IGame> GetAllGames()
     {
         return games.Select(g => g.ToIGame(producers.ToList()));

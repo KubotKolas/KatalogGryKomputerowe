@@ -31,6 +31,7 @@
       <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock/bin/$(Configuration)/net9.0/*.dll" />
       <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL/bin/$(Configuration)/net9.0/*.dll" />
       <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOFile/bin/$(Configuration)/net9.0/*.dll" />
+      <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOFile/bin/$(Configuration)/net9.0/*.json" />
     </ItemGroup>
 
     <PropertyGroup>
