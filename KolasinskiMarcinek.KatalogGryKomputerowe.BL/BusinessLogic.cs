@@ -10,6 +10,7 @@ public class BusinessLogic
     private IDAO _dao;
     private static BusinessLogic instance;
     private static readonly object lockObject = new object();
+
     public BusinessLogic(IConfiguration configuration)
     {
         // Pobieramy nazwę biblioteki z pliku konfiguracyjnego (wymóg 2.5)
@@ -110,14 +111,18 @@ public class BusinessLogic
     }
 
     public IEnumerable<IProducer> GetAllProducers() => _dao.GetAllProducers();
+
     public IEnumerable<IGame> GetAllGames() => _dao.GetAllGames();
 
     public IProducer CreateNewProducer(IProducer producer) => _dao.CreateNewProducer(producer);
+
     public IGame CreateNewGame(IGame game) => _dao.CreateNewGame(game);
 
     public void DeleteProducer(int producerId) => _dao.DeleteProducer(producerId);
+
     public void DeleteGame(int gameId) => _dao.DeleteGame(gameId);
 
     public void UpdateProducer(IProducer producer) => _dao.UpdateProducer(producer);
+
     public void UpdateGame(IGame game) => _dao.UpdateGame(game);
 }
