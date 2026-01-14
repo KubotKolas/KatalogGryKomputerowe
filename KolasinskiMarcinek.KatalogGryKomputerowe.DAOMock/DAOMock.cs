@@ -4,7 +4,9 @@ using System;
 
 namespace KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock;
 
-public class Class1
+public class DAOMock : IDAO
 {
+    private List<IProducer> producers;
+    
 
 }
