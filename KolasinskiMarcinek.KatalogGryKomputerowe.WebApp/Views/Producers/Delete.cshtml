@@ -1,0 +1,32 @@
+@model KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.IProducer
+
+@{
+    ViewData["Title"] = "Usuń Producenta";
+}
+
+<h1>Usuń producenta</h1>
+
+<div class="alert alert-warning">
+    <h3>Czy na pewno chcesz usunąć tego producenta?</h3>
+    <p class="text-danger"><strong>Uwaga:</strong> Usunięcie producenta może wpłynąć na przypisane do niego gry w katalogu.</p>
+</div>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">ID</dt>
+        <dd class = "col-sm-10">@Model.Id</dd>
+
+        <dt class = "col-sm-2">Nazwa</dt>
+        <dd class = "col-sm-10">@Model.Name</dd>
+
+        <dt class = "col-sm-2">Adres</dt>
+        <dd class = "col-sm-10">@Model.Address</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Usuń definitywnie" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+    </form>
+</div>

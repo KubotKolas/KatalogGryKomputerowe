@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES;
 using KolasinskiMarcinek.KatalogGryKomputerowe.CORE;
+using KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES;
 
 namespace KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL;
 
@@ -14,16 +14,19 @@ public class GameDb
     public bool Multiplayer { get; set; }
     public GameGenre Genre { get; set; }
 
-    public IGame ToIGame(List<ProducerDb> producers){
+    public IGame ToIGame(List<ProducerDb> producers)
+    {
         var foundProducer = producers.FirstOrDefault(p => p.Id == producerId);
 
-        return new Game(){
+        return new Game()
+        {
             Id = Id,
             Name = Name,
-            Producer = foundProducer?.ToIProducer() ?? new ProducerDb.Producer { Name = "Nieznany" },
+            Producer =
+                foundProducer?.ToIProducer() ?? new ProducerDb.Producer { Name = "Nieznany" },
             ReleaseYear = ReleaseYear,
             Multiplayer = Multiplayer,
-            Genre = Genre
+            Genre = Genre,
         };
     }
 

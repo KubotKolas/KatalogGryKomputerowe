@@ -15,9 +15,21 @@ public class GamesController : Controller
         _bl = bl;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string searchString)
     {
         var games = _bl.GetAllGames();
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            games = games.Where(g =>
+                g.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                || g.Genre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                || g.Producer.Name.ToString()
+                    .Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            );
+        }
+
+        ViewData["CurrentFilter"] = searchString;
         return View(games);
     }
 

@@ -2,8 +2,10 @@ using KolasinskiMarcinek.KatalogGryKomputerowe.BL;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<BusinessLogic>(sp =>
+    BusinessLogic.GetInstance(builder.Configuration)
+);
 
-builder.Services.AddSingleton<BusinessLogic>(sp => BusinessLogic.GetInstance(builder.Configuration));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -24,10 +26,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

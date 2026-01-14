@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.BL\KolasinskiMarcinek.KatalogGryKomputerowe.BL.csproj" />
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.CORE\KolasinskiMarcinek.KatalogGryKomputerowe.CORE.csproj" />
@@ -13,4 +12,30 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <Target Name="CopyDAOLibraries" AfterTargets="Build">
+    <ItemGroup>
+      <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock/bin/$(Configuration)/net9.0/*.dll" />
+      <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL/bin/$(Configuration)/net9.0/*.dll" />
+      <DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOFile/bin/$(Configuration)/net9.0/*.dll" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <SourceDbFile>$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL/game_catalog.db</SourceDbFile>
+    </PropertyGroup>
+    <Message Text="--- Automatyczne kopiowanie bibliotek DAO ---" Importance="high" />
+    <Copy SourceFiles="@(DAOLibs)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="false" />
+
+    <Copy
+      SourceFiles="$(SourceDbFile)"
+      DestinationFolder="$(TargetDir)"
+      Condition="Exists('$(SourceDbFile)')"
+      SkipUnchangedFiles="false"
+    />
+
+    <Message
+      Text="Baza danych nie została jeszcze utworzona w projekcie DAO, zostanie wygenerowana przy starcie."
+      Importance="high"
+      Condition="!Exists('$(SourceDbFile)')"
+    />
+  </Target>
 </Project>

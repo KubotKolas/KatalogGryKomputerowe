@@ -10,6 +10,5 @@ public enum GameGenre
     Stealth,
     Survival,
     MOBA,
-    Other
-
+    Other,
 };
