@@ -1,0 +1,39 @@
+@model IEnumerable<KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.IGame>
+
+@{
+    ViewData["Title"] = "Katalog Gier";
+}
+
+<h1>Lista Gier</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Dodaj nową grę</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Producent</th>
+            <th>Rok wydania</th>
+            <th>Gatunek</th>
+            <th>Multiplayer</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Producer.Name</td>
+                <td>@item.ReleaseYear</td>
+                <td>@item.Genre</td>
+                <td>@(item.Multiplayer ? "Tak" : "Nie")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

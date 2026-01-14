@@ -6,10 +6,26 @@
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <Target Name="CopyDAOLibraries" AfterTargets="Build">
+    <ItemGroup>
+      <DAOLibs Include="$(SolutionDir)KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock\bin\$(Configuration)\$(TargetFramework)\*.dll" />
+      <DAOLibs Include="$(SolutionDir)KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL\bin\$(Configuration)\$(TargetFramework)\*.dll" />
+      <DAOLibs Include="$(SolutionDir)KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL\game_catalog.db" />
+    </ItemGroup>
+    
+    <Message Text="Automatyczne kopiowanie bibliotek DAO..." Importance="high" />
+    <Copy SourceFiles="@(DAOLibs)" 
+          DestinationFolder="$(TargetDir)" 
+          SkipUnchangedFiles="true" />
+  </Target>
 </Project>

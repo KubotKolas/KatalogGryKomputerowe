@@ -1,0 +1,56 @@
+@model KolasinskiMarcinek.KatalogGryKomputerowe.WebApp.Models.GameViewModel
+
+<h1>Dodaj nową grę</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <!-- Podsumowanie błędów walidacji (Wymóg 6.3) -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReleaseYear" class="control-label">Rok wydania</label>
+                <input asp-for="ReleaseYear" class="form-control" />
+                <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Multiplayer" /> @Html.DisplayNameFor(model => model.Multiplayer)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Genre" class="control-label">Gatunek</label>
+                <select asp-for="Genre" class="form-control" 
+                        asp-items="Html.GetEnumSelectList<KolasinskiMarcinek.KatalogGryKomputerowe.CORE.GameGenre>()">
+                </select>
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedProducerId" class="control-label">Producent (Wymóg 6.2)</label>
+                <!-- Lista rozwijana z producentami -->
+                <select asp-for="SelectedProducerId" class="form-control" asp-items="Model.Producers">
+                    <option value="">-- Wybierz producenta --</option>
+                </select>
+                <span asp-validation-for="SelectedProducerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Zapisz" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Powrót</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

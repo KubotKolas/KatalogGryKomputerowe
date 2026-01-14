@@ -15,8 +15,31 @@ public class DAOSQL : DbContext, IDAO
     public DAOSQL(IConfiguration configuration)
     {
         _configuration = configuration;
+        if (Database.EnsureCreated())
+        {
+            SeedData();
+        }
     }
+
     public DAOSQL() { }
+
+    private void SeedData()
+    {
+        var p1 = new ProducerDb { Name = "Bethesda", Address = "USA" };
+        producers.Add(p1);
+
+        games.Add(
+            new GameDb
+            {
+                Name = "Skyrim",
+                producerId = p1.Id,
+                ReleaseYear = 2011,
+                Genre = CORE.GameGenre.RPG,
+            }
+        );
+
+        SaveChanges();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
