@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.CORE\KolasinskiMarcinek.KatalogGryKomputerowe.CORE.csproj" />
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.csproj" />

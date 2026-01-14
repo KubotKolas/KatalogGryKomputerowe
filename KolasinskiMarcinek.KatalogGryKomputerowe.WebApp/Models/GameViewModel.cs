@@ -5,7 +5,8 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.WebApp.Models;
 
 public class GameViewModel
 {
-    public int Id { get; set; } 
+    public int Id { get; set; }
+
     [Required(ErrorMessage = "Nazwa gry jest wymagana")]
     [MinLength(3, ErrorMessage = "Nazwa gry musi mieć minimum 3 znaki")]
     public string Name { get; set; } = string.Empty;

@@ -1,0 +1,12 @@
+[
+  {
+    "Id": 1,
+    "Name": "CD Projekt RED",
+    "Address": "Warszawa, Polska"
+  },
+  {
+    "Id": 2,
+    "Name": "FromSoftware",
+    "Address": "Tokyo, Japonia"
+  }
+]

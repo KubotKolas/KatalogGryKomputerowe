@@ -1,0 +1,39 @@
+@model KolasinskiMarcinek.KatalogGryKomputerowe.WebApp.Models.ProducerViewModel
+
+@{
+    ViewData["Title"] = "Edytuj Producenta";
+}
+
+<h1>Edytuj producenta</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <!-- Ukryte pole Id jest niezbędne do aktualizacji w bazie -->
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Nazwa firmy</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label">Adres / Siedziba</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Zapisz zmiany" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

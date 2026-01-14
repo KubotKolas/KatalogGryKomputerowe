@@ -1,22 +1,21 @@
-@model IEnumerable<KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.IGame>
-
+@model IEnumerable<KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.IProducer>
 @{
-    ViewData["Title"] = "Katalog Gier";
+    ViewData["Title"] = "Lista producentów";
 }
 
-<h1>Lista Gier</h1>
+<h1>Producenci</h1>
 
 <div class="row mb-3">
     <div class="col-md-6">
         <form asp-action="Index" method="get" class="form-inline d-flex gap-2">
             <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" 
-                   class="form-control" placeholder="Szukaj gry lub gatunku..." />
+                   class="form-control" placeholder="Szukaj producenta lub adresu..." />
             <button type="submit" class="btn btn-outline-primary">Szukaj</button>
             <a asp-action="Index" class="btn btn-outline-secondary">Wyczyść</a>
         </form>
     </div>
     <div class="col-md-6 text-end">
-        <a asp-action="Create" class="btn btn-primary">Dodaj nową grę</a>
+        <a asp-action="Create" class="btn btn-primary">Dodaj Producenta</a>
     </div>
 </div>
 
@@ -24,10 +23,7 @@
     <thead>
         <tr>
             <th>Nazwa</th>
-            <th>Producent</th>
-            <th>Rok wydania</th>
-            <th>Gatunek</th>
-            <th>Multiplayer</th>
+            <th>Adres</th>
             <th>Akcje</th>
         </tr>
     </thead>
@@ -35,10 +31,7 @@
         @foreach (var item in Model) {
             <tr>
                 <td>@item.Name</td>
-                <td>@item.Producer.Name</td>
-                <td>@item.ReleaseYear</td>
-                <td>@item.Genre</td>
-                <td>@(item.Multiplayer ? "Tak" : "Nie")</td>
+                <td>@item.Address</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">Usuń</a>
