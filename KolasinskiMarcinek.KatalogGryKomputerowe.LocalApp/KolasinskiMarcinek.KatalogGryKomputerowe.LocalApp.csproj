@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.BL\KolasinskiMarcinek.KatalogGryKomputerowe.BL.csproj" />
+    <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.CORE\KolasinskiMarcinek.KatalogGryKomputerowe.CORE.csproj" />
+    <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>
