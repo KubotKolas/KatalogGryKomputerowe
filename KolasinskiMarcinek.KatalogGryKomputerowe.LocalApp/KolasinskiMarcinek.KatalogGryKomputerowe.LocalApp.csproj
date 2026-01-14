@@ -1,22 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+	  <ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+	  </ItemGroup>
+
+	  <ItemGroup>
+		<ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.BL\KolasinskiMarcinek.KatalogGryKomputerowe.BL.csproj" />
+		<ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.CORE\KolasinskiMarcinek.KatalogGryKomputerowe.CORE.csproj" />
+		<ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.csproj" />
+	  </ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.BL\KolasinskiMarcinek.KatalogGryKomputerowe.BL.csproj" />
-    <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.CORE\KolasinskiMarcinek.KatalogGryKomputerowe.CORE.csproj" />
-    <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.csproj" />
-  </ItemGroup>
+	  <PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+	  </PropertyGroup>
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<Target Name="CopyDAOLibraries" AfterTargets="Build">
+		<ItemGroup>
+			<DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock/bin/$(Configuration)/net9.0/*.dll" />
+			<DAOLibs Include="$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL/bin/$(Configuration)/net9.0/*.dll" />
+		</ItemGroup>
+
+		<PropertyGroup>
+			<SourceDbFile>$(ProjectDir)../KolasinskiMarcinek.KatalogGryKomputerowe.DAOSQL/game_catalog.db</SourceDbFile>
+		</PropertyGroup>
+		<Message Text="--- Automatyczne kopiowanie bibliotek DAO ---" Importance="high" />
+		<Copy SourceFiles="@(DAOLibs)"
+			  DestinationFolder="$(TargetDir)"
+			  SkipUnchangedFiles="false" />
+
+		<Copy SourceFiles="$(SourceDbFile)"
+			  DestinationFolder="$(TargetDir)"
+			  Condition="Exists('$(SourceDbFile)')"
+			  SkipUnchangedFiles="false" />
+
+		<Message Text="Baza danych nie została jeszcze utworzona w projekcie DAO, zostanie wygenerowana przy starcie."
+				Importance="high"
+				Condition="!Exists('$(SourceDbFile)')" />
+	</Target>
 
 </Project>
