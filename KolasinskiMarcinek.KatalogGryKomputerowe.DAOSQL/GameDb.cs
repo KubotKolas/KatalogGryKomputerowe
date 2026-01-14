@@ -18,7 +18,7 @@ public class GameDb
         return new Game(){
             Id = Id,
             Name = Name,
-            producer = producers.Single(p => p.Id.Equals(producerId)).ToIProducer(),
+            Producer = producers.Single(p => p.Id.Equals(producerId)).ToIProducer(),
             ReleaseYear = ReleaseYear,
             Multiplayer = Multiplayer,
             Genre = Genre
@@ -32,6 +32,6 @@ public class GameDb
         public GameGenre Genre { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public IProducer producer { get; set; }
+        public IProducer Producer { get; set; }
     }
 }

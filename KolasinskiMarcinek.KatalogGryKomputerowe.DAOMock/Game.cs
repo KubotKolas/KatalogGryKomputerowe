@@ -10,5 +10,5 @@ public class Game : IGame
     public GameGenre Genre { get; set; }
     public int Id { get; set; }
     public string Name { get; set; }
-    public IProducer producer { get; set; }
+    public IProducer Producer { get; set; }
 }

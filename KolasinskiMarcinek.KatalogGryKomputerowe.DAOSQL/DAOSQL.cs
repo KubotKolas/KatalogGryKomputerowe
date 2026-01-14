@@ -10,71 +10,55 @@ public class DAOSQL : DbContext, IDAO
     public DbSet<ProducerDb> producers { get; set; }
     public string DbPath { get; }
 
-    private IConfiguration _configuration;
+    private readonly IConfiguration? _configuration;
 
     public DAOSQL(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-
-    public DAOSQL()
-    {
-        var folder = Environment.SpecialFolder.LocalApplicationData;
-        var path = Environment.GetFolderPath(folder);
-        DbPath = Path.Join("", "game_catalog.db");
-    }
-
-    public DAOSQL(string dbFilePath)
-    {
-        var folder = Environment.SpecialFolder.LocalApplicationData;
-        var path = Environment.GetFolderPath(folder);
-        DbPath = Path.Join(dbFilePath);
-    }
+    public DAOSQL() { }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        string? connectionString = _configuration?.GetConnectionString("DefaultConnection");
 
-
-        // TODO: replace
-        string projectRootDirectory = Directory
-            .GetParent(currentDirectory)
-            ?.Parent?.Parent?.Parent?.FullName;
-
-        if (projectRootDirectory != null)
+        if (string.IsNullOrEmpty(connectionString))
         {
-            string dbFilePath = Path.Combine(projectRootDirectory, "game_catalog.db");
-            options.UseSqlite($"Data Source={dbFilePath}");
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string dbPath = Path.Combine(baseDir, "game_catalog.db");
+            connectionString = $"Data Source={dbPath}";
         }
-        else
-        {
-            throw new InvalidOperationException(
-                "Failed to determine the project's root directory."
-            );
-        }
+
+        options.UseSqlite(connectionString);
     }
 
     public IGame CreateNewGame(IGame game)
     {
-        Add(new GameDb(){
-            Id = game.Id,
-            Name = game.Name,
-            producerId = game.producer.Id,
-            ReleaseYear = game.ReleaseYear,
-            Multiplayer = game.Multiplayer,
-            Genre = game.Genre
-        });
+        Add(
+            new GameDb()
+            {
+                Id = game.Id,
+                Name = game.Name,
+                producerId = game.Producer.Id,
+                ReleaseYear = game.ReleaseYear,
+                Multiplayer = game.Multiplayer,
+                Genre = game.Genre,
+            }
+        );
         SaveChanges();
         return game;
     }
 
-    public IProducer CreateNewProducecr(IProducer producer)
+    public IProducer CreateNewProducer(IProducer producer)
     {
-        Add(new ProducerDb(){
-            Id = producer.Id,
-            Name = producer.Name,
-            Address = producer.Address
-        });
+        Add(
+            new ProducerDb()
+            {
+                Id = producer.Id,
+                Name = producer.Name,
+                Address = producer.Address,
+            }
+        );
         SaveChanges();
         return producer;
     }
@@ -99,7 +83,7 @@ public class DAOSQL : DbContext, IDAO
         return games.Select(g => g.ToIGame(producers.ToList()));
     }
 
-    public IEnumerable<IProducer> GetAllProducer()
+    public IEnumerable<IProducer> GetAllProducers()
     {
         return producers.Select(p => p);
     }
@@ -109,14 +93,13 @@ public class DAOSQL : DbContext, IDAO
         var newGame = games.FirstOrDefault(g => g.Id.Equals(game.Id));
 
         newGame.Name = game.Name;
-        newGame.producerId = game.producer.Id;
+        newGame.producerId = game.Producer.Id;
         newGame.ReleaseYear = game.ReleaseYear;
         newGame.Multiplayer = game.Multiplayer;
         newGame.Genre = game.Genre;
 
         Entry(newGame).CurrentValues.SetValues(newGame);
         SaveChanges();
-        
     }
 
     public void UpdateProducer(IProducer producer)

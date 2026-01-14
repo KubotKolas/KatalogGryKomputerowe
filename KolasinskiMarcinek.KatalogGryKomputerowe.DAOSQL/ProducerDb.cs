@@ -10,8 +10,14 @@ public class ProducerDb : IProducer
     public string Name { get; set; }
     public string Address { get; set; }
 
-    public IProducer ToIProducer(){
-        return new Producer() { Id = Id, Name = Name, Address = Address };
+    public IProducer ToIProducer()
+    {
+        return new Producer()
+        {
+            Id = Id,
+            Name = Name,
+            Address = Address,
+        };
     }
 
     public class Producer : IProducer
