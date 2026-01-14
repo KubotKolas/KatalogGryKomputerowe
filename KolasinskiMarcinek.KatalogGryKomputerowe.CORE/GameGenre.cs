@@ -1,4 +1,6 @@
-﻿namespace KolasinskiMarcinek.KatalogGryKomputerowe.CORE;
+﻿using System.ComponentModel;
+
+namespace KolasinskiMarcinek.KatalogGryKomputerowe.CORE;
 
 public enum GameGenre
 {
@@ -7,9 +9,11 @@ public enum GameGenre
     Action,
     TowerDefense,
     RTS,
+    TurnBaseStrategy,
     Stealth,
     Survival,
     MOBA,
+    Racing,
     Other
 
 };

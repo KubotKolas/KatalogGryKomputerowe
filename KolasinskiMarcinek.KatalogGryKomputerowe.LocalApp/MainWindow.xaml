@@ -14,98 +14,110 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
-                <!-- FILTERS PANEL - TOP SECTION -->
+                
+                <!-- FILTERS PANEL - TOP SECTION (ALL IN ONE LINE) -->
                 <Border Grid.Row="0" Margin="10" Padding="10" Background="#FFF8F8F8" BorderBrush="#FFCCCCCC" BorderThickness="1">
-                    <StackPanel>
-                        <TextBlock Text="Filtry i wyszukiwanie" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
-
-                        <WrapPanel>
-                            <StackPanel Margin="0,0,20,0" Width="200">
-                                <TextBlock Margin="0,0,0,5">Filtruj po:</TextBlock>
-                                <ComboBox Name="filterTypeComboBox" SelectionChanged="FilterTypeComboBox_SelectionChanged">
-                                    <ComboBoxItem Content="socket type" />
-                                    <ComboBoxItem Content="manufacturer" />
-                                    <ComboBoxItem Content="number of cores" />
-                                </ComboBox>
-                            </StackPanel>
-
-                            <StackPanel Margin="0,0,20,0" Width="150">
-                                <TextBlock Margin="0,0,0,5">Wartość:</TextBlock>
-                                <ComboBox Name="filterValueComboBox" />
-                            </StackPanel>
-
-                            <StackPanel Margin="0,0,20,0" Width="200">
-                                <TextBlock Margin="0,0,0,5">Szukaj po nazwie:</TextBlock>
-                                <TextBox Name="cpuSearchField" />
-                            </StackPanel>
-
-                            <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,10,0">
-                                <Button Margin="0,0,5,0" Padding="10,5" Click="CPUApplyFilter" Background="#FFE1E1FF">Filtruj</Button>
-                                <Button Margin="0,0,5,0" Padding="10,5" Click="ApplyCPUSearch" Background="#FFE1FFE1">Szukaj</Button>
-                                <Button Padding="10,5" Click="RemoveFiltersCPU" Background="#FFF0F0F0">Wyczyść Filtry</Button>
-                            </StackPanel>
-                        </WrapPanel>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Filtruj po: -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Margin="0,0,0,2">Filtruj po:</TextBlock>
+                            <ComboBox Name="filterTypeComboBox" Width="120" SelectionChanged="FilterTypeComboBoxSelectionChanged">
+                                <ComboBoxItem Content="Wieloosobowy" />
+                                <ComboBoxItem Content="Twórca" />
+                                <ComboBoxItem Content="Gatunek" />
+                            </ComboBox>
+                        </StackPanel>
+                        
+                        <!-- Wartość: -->
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Margin="0,0,0,2">Wartość:</TextBlock>
+                            <ComboBox Name="filterValueComboBox" Width="100" />
+                        </StackPanel>
+                        
+                        <!-- Przycisk Filtruj -->
+                        <StackPanel Grid.Column="2" VerticalAlignment="Bottom" Margin="0,0,15,0">
+                            <Button Padding="8,4" Click="GameApplyFilter" Background="#FFE1E1FF">Filtruj</Button>
+                        </StackPanel>
+                        
+                        <!-- Szukaj po nazwie: -->
+                        <StackPanel Grid.Column="3" Margin="0,0,15,0">
+                            <TextBlock Margin="0,0,0,2">Szukaj po nazwie:</TextBlock>
+                            <TextBox Name="gameSearchField" Width="150" />
+                        </StackPanel>
+                        
+                        <!-- Przyciski Szukaj i Wyczyść -->
+                        <StackPanel Grid.Column="4" VerticalAlignment="Bottom" Orientation="Horizontal">
+                            <Button Margin="0,0,5,0" Padding="8,4" Click="ApplyGameSearch" Background="#FFE1FFE1">Szukaj</Button>
+                            <Button Padding="8,4" Click="RemoveFiltersGame" Background="#FFF0F0F0">Wyczyść</Button>
+                        </StackPanel>
+                    </Grid>
                 </Border>
-
+                
                 <!-- MAIN CONTENT AREA -->
                 <Grid Grid.Row="1" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-
+                    
                     <!-- LEFT: LIST VIEW -->
                     <Grid Grid.Column="0" Margin="0,0,10,0">
-                        <ListView Name="CPUList" 
-                          ItemsSource="{Binding ElementName=Window, Path=CPULVM.CPUs}" 
-                          SelectionChanged="CPUList_SelectionChanged"
+                        <ListView Name="GamesList" 
+                          ItemsSource="{Binding ElementName=Window, Path=gamesListViewModel.gamesList}" 
+                          SelectionChanged="GameListSelectionChanged"
                           ScrollViewer.VerticalScrollBarVisibility="Visible">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Nazwa gry" Width="250" DisplayMemberBinding="{Binding CPUName}"/>
-                                    <GridViewColumn Header="Twórca" Width="200" DisplayMemberBinding="{Binding CPUProducerName}"/>
-                                    <GridViewColumn Header="Data Wydania" Width="60" DisplayMemberBinding="{Binding CPUCores}"/>
-                                    <!--GridViewColumn Header="Socket" Width="100" DisplayMemberBinding="{Binding CPUSocketType}"/-->
+                                    <GridViewColumn Header="Nazwa gry" Width="230" DisplayMemberBinding="{Binding GameName}"/>
+                                    <GridViewColumn Header="Twórca" Width="200" DisplayMemberBinding="{Binding GameProducerName}"/>
+                                    <GridViewColumn Header="Data Wydania" Width="90" DisplayMemberBinding="{Binding GameReleaseYear}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                     </Grid>
-
+                    
                     <!-- RIGHT: DETAILS PANEL -->
                     <Border Grid.Column="1" Padding="10" Background="#FFF5F5F5" BorderBrush="#FFCCCCCC" BorderThickness="1">
-                        <StackPanel DataContext="{Binding ElementName=CPUList, Path=SelectedItem}">
+                        <StackPanel DataContext="{Binding ElementName=GamesList, Path=SelectedItem}">
                             <TextBlock Text="Informacje o grze" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
                             <TextBlock Margin="0,2">
                                 <Run Text="ID: " FontWeight="Bold"/>
-                                <Run Text="{Binding CPUID}"/>
+                                <Run Text="{Binding GameId}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
                                 <Run Text="Nazwa: " FontWeight="Bold"/>
-                                <Run Text="{Binding CPUName}"/>
+                                <Run Text="{Binding GameName}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
                                 <Run Text="Data wydania: " FontWeight="Bold"/>
-                                <Run Text="{Binding CPUCores}"/>
+                                <Run Text="{Binding GameReleaseYear}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
-                                <Run Text="Wielosobowe: " FontWeight="Bold"/>
-                                <Run Text="{Binding CPUThreads}"/>
+                                <Run Text="Wieloosobowe: " FontWeight="Bold"/>
+                                <Run Text="{Binding GameMultiplayer}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
                                 <Run Text="Gatunek: " FontWeight="Bold"/>
-                                <Run Text="{Binding CPUBaseClockGhz}"/> <Run Text="GHz"/>
+                                <Run Text="{Binding GameGenre}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
                                 <Run Text="Twórca: " FontWeight="Bold"/>
-                                <Run Text="{Binding CPUSocketType}"/>
+                                <Run Text="{Binding GameProducerName}"/>
                             </TextBlock>
 
                             <StackPanel Margin="0,20,0,0">
-                                <Button Margin="0,0,0,5" Padding="5" Click="EditCPU" Background="#ffffed">Edytuj wybrane</Button>
-                                <Button Margin="0,0,0,5" Padding="5" Click="RemoveCPU" Background="#FF7276">Usuń wybrane</Button>
-                                <Button Margin="0,0,0,5" Padding="5" Click="AddCPU" Background="#FFE1FFE1">Dodaj nową grę</Button>
+                                <Button Margin="0,0,0,5" Padding="5" Click="EditGame" Background="#ffffed">Edytuj wybrane</Button>
+                                <Button Margin="0,0,0,5" Padding="5" Click="RemoveGame" Background="#FF7276">Usuń wybrane</Button>
+                                <Button Margin="0,0,0,5" Padding="5" Click="AddGame" Background="#FFE1FFE1">Dodaj nową grę</Button>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -120,75 +132,86 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
-                <!-- FILTERS PANEL - TOP SECTION -->
+                
+                <!-- FILTERS PANEL - TOP SECTION (ALL IN ONE LINE) -->
                 <Border Grid.Row="0" Margin="10" Padding="10" Background="#FFF8F8F8" BorderBrush="#FFCCCCCC" BorderThickness="1">
-                    <StackPanel>
-                        <TextBlock Text="Filtry i wyszukiwanie" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
-
-                        <WrapPanel>
-                            <StackPanel Margin="0,0,20,0" Width="200">
-                                <TextBlock Margin="0,0,0,5">Filtruj po adresie:</TextBlock>
-                                <ComboBox Name="manufacturerFilterValueComboBox" />
-                            </StackPanel>
-
-                            <StackPanel Margin="0,0,20,0" Width="200">
-                                <TextBlock Margin="0,0,0,5">Wyszukuj po nazwie:</TextBlock>
-                                <TextBox Name="manufacturerSearchField" />
-                            </StackPanel>
-
-                            <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,10,0">
-                                <Button Margin="0,0,5,0" Padding="10,5" Click="ManufacturerApplyFilter" Background="#FFE1E1FF">Zastosuj filtr</Button>
-                                <Button Margin="0,0,5,0" Padding="10,5" Click="ApplyManufacturerSearch" Background="#FFE1FFE1">Szukaj</Button>
-                                <Button Padding="10,5" Click="RemoveFiltersManufacturer" Background="#FFF0F0F0">Usuń filtry</Button>
-                            </StackPanel>
-                        </WrapPanel>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Filtruj po adresie: -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Margin="0,0,0,2">Filtruj po adresie:</TextBlock>
+                            <ComboBox Name="ProducerFilterValueComboBox" Width="120" />
+                        </StackPanel>
+                        
+                        <!-- Przycisk Zastosuj filtr -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,15,0">
+                            <Button Padding="8,4" Click="ProducerApplyFilter" Background="#FFE1E1FF">Zastosuj filtr</Button>
+                        </StackPanel>
+                        
+                        <!-- Wyszukuj po nazwie: -->
+                        <StackPanel Grid.Column="2" Margin="0,0,15,0">
+                            <TextBlock Margin="0,0,0,2">Wyszukuj po nazwie:</TextBlock>
+                            <TextBox Name="producerSearchField" Width="150" />
+                        </StackPanel>
+                        
+                        <!-- Przyciski Szukaj i Usuń -->
+                        <StackPanel Grid.Column="3" VerticalAlignment="Bottom" Orientation="Horizontal">
+                            <Button Margin="0,0,5,0" Padding="8,4" Click="ApplyProducerSearch" Background="#FFE1FFE1">Szukaj</Button>
+                            <Button Padding="8,4" Click="RemoveFiltersProducer" Background="#FFF0F0F0">Wyczyść</Button>
+                        </StackPanel>
+                    </Grid>
                 </Border>
-
+                
                 <!-- MAIN CONTENT AREA -->
                 <Grid Grid.Row="1" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-
+                    
                     <!-- LEFT: LIST VIEW -->
                     <Grid Grid.Column="0" Margin="0,0,10,0">
                         <ListView Name="ManufacturerList" 
-                          ItemsSource="{Binding ElementName=Window, Path=ManufacturerLVM.Manufacturers}" 
-                          SelectionChanged="ManufacturerList_SelectionChanged"
+                          ItemsSource="{Binding ElementName=Window, Path=producerList.producerList}" 
+                          SelectionChanged="ProducerListSelectionChanged"
                           ScrollViewer.VerticalScrollBarVisibility="Visible">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Nazwa twórcy" Width="250" DisplayMemberBinding="{Binding ManufacturerName}"/>
-                                    <GridViewColumn Header="Adres" Width="300" DisplayMemberBinding="{Binding ManufacturerAddress}"/>
+                                    <GridViewColumn Header="Nazwa twórcy" Width="250" DisplayMemberBinding="{Binding ProdcuerName}"/>
+                                    <GridViewColumn Header="Adres" Width="300" DisplayMemberBinding="{Binding ProdcuerAddress}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                     </Grid>
-
+                    
                     <!-- RIGHT: DETAILS PANEL -->
                     <Border Grid.Column="1" Padding="10" Background="#FFF5F5F5" BorderBrush="#FFCCCCCC" BorderThickness="1">
-                        <StackPanel DataContext="{Binding ElementName=ManufacturerList, Path=SelectedItem}">
+                        <StackPanel DataContext="{Binding ElementName=ProducerList, Path=SelectedItem}">
                             <TextBlock Text="Informacje o twórcy" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
                             <TextBlock Margin="0,2">
                                 <Run Text="ID: " FontWeight="Bold"/>
-                                <Run Text="{Binding ManufacturerId}"/>
+                                <Run Text="{Binding ProdcuerId}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
                                 <Run Text="Nazwa: " FontWeight="Bold"/>
-                                <Run Text="{Binding ManufacturerName}"/>
+                                <Run Text="{Binding ProdcuerName}"/>
                             </TextBlock>
                             <TextBlock Margin="0,2">
                                 <Run Text="Address: " FontWeight="Bold"/>
                                 <Run Text="{Binding ManufacturerAddress}"/>
                             </TextBlock>
-
+                            
                             <StackPanel Margin="0,20,0,0">
-                                <Button Margin="0,0,0,5" Padding="5" Click="EditManufacturer" Background="#ffffed">Edytuj wybrany</Button>
-                                <Button Margin="0,0,0,5" Padding="5" Click="RemoveManufacturer" Background="#FF7276">Usuń wybrany</Button>
-                                <Button Margin="0,0,0,5" Padding="5" Click="AddManufacturer" Background="#FFE1FFE1">Dodaj nowego twórcę</Button>
+                                <Button Margin="0,0,0,5" Padding="5" Click="EditProducer" Background="#ffffed">Edytuj wybrany</Button>
+                                <Button Margin="0,0,0,5" Padding="5" Click="RemoveProducer" Background="#FF7276">Usuń wybrany</Button>
+                                <Button Margin="0,0,0,5" Padding="5" Click="AddProducer" Background="#FFE1FFE1">Dodaj nowego twórcę</Button>
                             </StackPanel>
                         </StackPanel>
                     </Border>

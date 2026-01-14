@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.BL\KolasinskiMarcinek.KatalogGryKomputerowe.BL.csproj" />
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.CORE\KolasinskiMarcinek.KatalogGryKomputerowe.CORE.csproj" />
     <ProjectReference Include="..\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES\KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES.csproj" />
