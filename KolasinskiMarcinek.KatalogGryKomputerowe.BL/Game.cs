@@ -1,7 +1,7 @@
 using KolasinskiMarcinek.KatalogGryKomputerowe.CORE;
 using KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES;
 
-namespace KolasinskiMarcinek.KatalogGryKomputerowe.DAOMock;
+namespace KolasinskiMarcinek.KatalogGryKomputerowe.BL;
 
 public class Game : IGame
 {

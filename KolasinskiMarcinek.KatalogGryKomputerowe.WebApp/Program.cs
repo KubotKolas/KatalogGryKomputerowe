@@ -1,5 +1,9 @@
+using KolasinskiMarcinek.KatalogGryKomputerowe.BL;
+
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddSingleton<BusinessLogic>(sp => BusinessLogic.GetInstance(builder.Configuration));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

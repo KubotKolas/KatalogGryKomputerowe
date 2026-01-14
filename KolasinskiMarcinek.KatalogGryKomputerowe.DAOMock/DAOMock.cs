@@ -37,7 +37,7 @@ public class DAOMock : IDAO
             {
                 Id = 1,
                 Name = "Baldure's Gate 3",
-                producer = producers[1],
+                Producer = producers[1],
                 ReleaseYear = 2023,
                 Multiplayer = true,
                 Genre = GameGenre.RPG,
@@ -46,7 +46,7 @@ public class DAOMock : IDAO
             {
                 Id = 2,
                 Name = "Starfield",
-                producer = producers[0],
+                Producer = producers[0],
                 ReleaseYear = 2023,
                 Multiplayer = false,
                 Genre = GameGenre.Adventure,
@@ -54,7 +54,7 @@ public class DAOMock : IDAO
         };
     }
 
-    public IProducer CreateNewProducecr(IProducer producer)
+    public IProducer CreateNewProducer(IProducer producer)
     {
         producer.Id = nextIdProd++;
         producers.Add(producer);
@@ -89,7 +89,7 @@ public class DAOMock : IDAO
         }
         else
         {
-            CreateNewProducecr(producer);
+            CreateNewProducer(producer);
         }
     }
 
@@ -106,7 +106,7 @@ public class DAOMock : IDAO
         }
     }
 
-    public IEnumerable<IProducer> GetAllProducer()
+    public IEnumerable<IProducer> GetAllProducers()
     {
         return producers;
     }

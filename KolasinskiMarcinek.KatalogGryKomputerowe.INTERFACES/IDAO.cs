@@ -2,10 +2,10 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.INTERFACES;
 
 public interface IDAO
 {
-    IEnumerable<IProducer> GetAllProducer();
+    IEnumerable<IProducer> GetAllProducers();
     IEnumerable<IGame> GetAllGames();
 
-    IProducer CreateNewProducecr(IProducer producer);
+    IProducer CreateNewProducer(IProducer producer);
     IGame CreateNewGame(IGame game);
 
     void DeleteProducer(int producerId);
