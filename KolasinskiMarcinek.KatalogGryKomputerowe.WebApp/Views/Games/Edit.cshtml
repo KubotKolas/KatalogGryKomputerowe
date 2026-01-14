@@ -1,0 +1,39 @@
+@model KolasinskiMarcinek.KatalogGryKomputerowe.WebApp.Models.GameViewModel
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReleaseYear">Rok wydania</label>
+        <input asp-for="ReleaseYear" class="form-control" />
+        <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-group form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="Multiplayer" /> @Html.DisplayNameFor(model => model.Multiplayer)
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Genre">Gatunek</label>
+        <select asp-for="Genre" class="form-control" 
+                asp-items="Html.GetEnumSelectList<KolasinskiMarcinek.KatalogGryKomputerowe.CORE.GameGenre>()">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedProducerId">Producent</label>
+        <select asp-for="SelectedProducerId" class="form-control" asp-items="Model.Producers"></select>
+    </div>
+
+    <input type="submit" value="Zapisz zmiany" class="btn btn-primary" />
+</form>

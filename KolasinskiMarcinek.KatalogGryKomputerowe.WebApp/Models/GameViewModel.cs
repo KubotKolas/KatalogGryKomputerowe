@@ -5,9 +5,10 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.WebApp.Models;
 
 public class GameViewModel
 {
+    public int Id { get; set; } 
     [Required(ErrorMessage = "Nazwa gry jest wymagana")]
     [MinLength(3, ErrorMessage = "Nazwa gry musi mieć minimum 3 znaki")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Rok wydania jest wymagany")]
     [Range(1950, 2100, ErrorMessage = "Nieprawidłowy rok wydania")]

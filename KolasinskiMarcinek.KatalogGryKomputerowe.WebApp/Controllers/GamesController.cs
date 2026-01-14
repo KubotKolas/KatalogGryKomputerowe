@@ -60,4 +60,72 @@ public class GamesController : Controller
         _bl.CreateNewGame(newGame);
         return RedirectToAction("Index");
     }
+
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        var game = _bl.GetAllGames().FirstOrDefault(g => g.Id == id);
+        if (game == null)
+            return NotFound();
+
+        var model = new GameViewModel
+        {
+            Id = game.Id,
+            Name = game.Name,
+            ReleaseYear = game.ReleaseYear,
+            Multiplayer = game.Multiplayer,
+            Genre = game.Genre,
+            SelectedProducerId = game.Producer.Id,
+            Producers = _bl.GetAllProducers()
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name,
+                    Selected = p.Id == game.Producer.Id,
+                })
+                .ToList(),
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public IActionResult Edit(int id, GameViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            model.Producers = _bl.GetAllProducers()
+                .Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
+                .ToList();
+            return View(model);
+        }
+
+        var gameToUpdate = new BL.Game
+        {
+            Id = id,
+            Name = model.Name,
+            ReleaseYear = model.ReleaseYear,
+            Multiplayer = model.Multiplayer,
+            Genre = model.Genre,
+            Producer = _bl.GetAllProducers().First(p => p.Id == model.SelectedProducerId),
+        };
+
+        _bl.UpdateGame(gameToUpdate);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        var game = _bl.GetAllGames().FirstOrDefault(g => g.Id == id);
+        if (game == null)
+            return NotFound();
+        return View(game);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        _bl.DeleteGame(id);
+        return RedirectToAction("Index");
+    }
 }
