@@ -15,7 +15,9 @@ public class DAOSQL : DbContext, IDAO
     public DAOSQL(IConfiguration configuration)
     {
         _configuration = configuration;
-        if (Database.EnsureCreated())
+        Database.EnsureCreated();
+
+        if (!producers.Any())
         {
             SeedData();
         }
