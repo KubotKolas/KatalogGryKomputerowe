@@ -1,0 +1,52 @@
+﻿<Window x:Class="KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp.NewProducer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp"
+        mc:Ignorable="d"
+        Title="NewProducer" Height="300" Width="500" Background="#151517">
+    <Grid Margin="20" Background="#151517">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1" Width="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" FontSize="16" FontWeight="Bold" Margin="0,0,0,20" Foreground="#e4e4e5"
+                   HorizontalAlignment="Center" TextAlignment="Center" Name="headerText" >
+            Podaj informacje o Twórcy:
+            </TextBlock>
+
+            <TextBlock Grid.Row="1" Text="Nazwa Twórcy:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <TextBox Name="producerName" Grid.Row="2" Margin="0,0,0,15" VerticalContentAlignment="Center" 
+                 Text="Nazwa" Height="25" Background="#2c2c2e" Foreground="#e4e4e5" BorderBrush="#2c2c2e" BorderThickness="1"/>
+
+            <TextBlock Grid.Row="3" Text="Adress:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <TextBox Name="producerAdress" Grid.Row="4" Margin="0,0,0,15" VerticalContentAlignment="Center"  Height="25"
+                     Background="#2c2c2e" Foreground="#e4e4e5" BorderBrush="#2c2c2e" BorderThickness="1"/>
+
+            <WrapPanel Grid.Row="5" HorizontalAlignment="Center">
+                <Button IsDefault="True" Name="ConfirmButton" Click="Confirm" Foreground="#e4e4e5" Background="#7160e8" BorderBrush="#7160e8" BorderThickness="1"
+                    MinWidth="80" Padding="10,5">Zastosuj</Button>
+                <Button IsCancel="True" MinWidth="80" Padding="10,5" Content="Anuluj" Foreground="#e4e4e5" Background="#7160e8" BorderBrush="#7160e8" BorderThickness="1"/>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</Window>

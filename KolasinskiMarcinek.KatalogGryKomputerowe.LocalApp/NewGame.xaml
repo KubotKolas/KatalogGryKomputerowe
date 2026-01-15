@@ -1,0 +1,68 @@
+﻿<Window x:Class="KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp.NewGame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp"
+        mc:Ignorable="d"
+        Title="Nowa gra" Height="480" Width="600" Background="#151517"
+        xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+
+    <Grid Margin="20" Background="#151517">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1" Width="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" FontSize="16" FontWeight="Bold" Margin="0,0,0,20" 
+                       HorizontalAlignment="Center" TextAlignment="Center" Name="headerText" Foreground="#e4e4e5">
+                Podaj informacje o grze:
+            </TextBlock>
+
+            <TextBlock Grid.Row="1" Text="Nazwa gry:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <TextBox Name="gameName" Grid.Row="2" Margin="0,0,0,15" VerticalContentAlignment="Center" 
+                     Text="Nazwa" Height="30" Background="#2c2c2e" Foreground="#e4e4e5" BorderBrush="#4d4d4f" BorderThickness="1"/>
+
+            <TextBlock Grid.Row="3" Text="Gatunek:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <ComboBox Name="gameGenre" Grid.Row="4" Margin="0,0,0,15" Height="30" Style="{StaticResource ComboBoxStyle1}"/>
+
+            <TextBlock Grid.Row="5" Text="Twórca:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <ComboBox Name="gameProducer" Grid.Row="6" Margin="0,0,0,15" Height="30" Style="{StaticResource ComboBoxStyle1}"/>
+
+            <TextBlock Grid.Row="7" Text="Rok wydania:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <TextBox Name="ReleaseDate" Grid.Row="8" Margin="0,0,0,15" VerticalContentAlignment="Center" Height="30" 
+                     PreviewTextInput="ValidateReleaseYear" Background="#2c2c2e" Foreground="#e4e4e5" BorderBrush="#4d4d4f" BorderThickness="1"/>
+
+            <TextBlock Grid.Row="9" Text="Wieloosobowa:" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#e4e4e5"/>
+            <ComboBox Name="Multiplayer" Grid.Row="10" Margin="0,0,0,25" Height="30" Style="{StaticResource ComboBoxStyle1}" SelectionChanged="Multiplayer_SelectionChanged">
+                <ComboBoxItem Content="Tak" IsSelected="True"/>
+                <ComboBoxItem Content="Nie" />
+            </ComboBox>
+
+            <WrapPanel Grid.Row="11" HorizontalAlignment="Center">
+                <Button IsDefault="True" Name="ConfirmButton" Click="Confirm"
+                        Foreground="#e4e4e5" Background="#7160e8" BorderBrush="#7160e8" BorderThickness="1"
+                        MinWidth="80" Padding="10,5" Margin="0,0,10,0">Zastosuj</Button>
+                <Button IsCancel="True" MinWidth="80" Padding="10,5" Content="Anuluj" 
+                        Foreground="#e4e4e5" Background="#7160e8" BorderBrush="#7160e8" BorderThickness="1"/>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</Window>

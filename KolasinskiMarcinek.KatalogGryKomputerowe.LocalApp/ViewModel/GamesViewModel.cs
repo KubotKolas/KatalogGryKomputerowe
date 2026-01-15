@@ -61,7 +61,17 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp.ViewModel
             }
         }
 
-        public int GameReleaseYear
+        public string GameMultiplayerText 
+        {
+            get => game.Multiplayer ? "Tak" : "Nie";
+            set
+            {
+                game.Multiplayer = value == "Tak" ? true : false;
+                RaisePropertyChanged(nameof(GameMultiplayer));
+            }
+        }
+
+public int GameReleaseYear
         {
             get => game.ReleaseYear;
             set

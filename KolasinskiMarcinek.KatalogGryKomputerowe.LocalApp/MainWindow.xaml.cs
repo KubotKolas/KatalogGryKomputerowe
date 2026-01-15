@@ -28,7 +28,6 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
-        this.DataContext = this;
         IConfiguration config = new ConfigurationBuilder().Build();
 
         businessLogic = BusinessLogic.GetInstance(config);
@@ -39,32 +38,23 @@ public partial class MainWindow : Window
 
     private void Refresh()
     {
-        // Refresh ViewModels from Business Logic
         producerListViewModel.RefreshList(businessLogic.GetAllProducers());
         gamesListViewModel.RefreshList(businessLogic.GetAllGames());
+        LoadAdresses();
+    }
 
-        var allGames = businessLogic.GetAllGames();
+    private void LoadAdresses()
+    {
+        ProducerFilterValueComboBox.ItemsSource = null;
 
-        // Message Box z listą gier z Business Logic
-        string gameListBL = "Gry z Business Logic:\n\n";
-        int i = 1;
-        foreach (var game in allGames)
-        {
-            gameListBL += $"{i}. ID: {game.Id}, Nazwa: {game.Name}, Rok: {game.ReleaseYear}, Producent: {game.Producer?.Name ?? "Brak"}\n";
-            i++;
-        }
-        MessageBox.Show(gameListBL, $"Business Logic - Liczba gier: {allGames.Count()}");
+        var addresses = businessLogic.GetAllProducers()
+            .Select(p => p.Address)
+            .Where(addr => !string.IsNullOrEmpty(addr))
+            .Distinct()
+            .OrderBy(addr => addr)
+            .ToList();
 
-        // Message Box z listą gier z ViewModel
-        string gameListVM = "Gry w ViewModel (gamesListViewModel.gamesList):\n\n";
-        int j = 1;
-        foreach (var gameVM in gamesListViewModel.gamesList)
-        {
-            gameListVM += $"{j}. ID: {gameVM.GameId}, Nazwa: {gameVM.GameName}, Rok: {gameVM.GameReleaseYear}, Producent: {gameVM.GameProducerName}\n";
-            j++;
-        }
-        MessageBox.Show(gameListVM, $"ViewModel - Liczba gier: {gamesListViewModel.gamesList.Count}");
-
+        ProducerFilterValueComboBox.ItemsSource = addresses;
     }
 
     private void FilterTypeComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -75,22 +65,21 @@ public partial class MainWindow : Window
         switch (selectedValue)
         {
             case "Wieloosobowy":
-                filterValueComboBox.ItemsSource = businessLogic.GetAllGames()
-                    .Select(g => g.Multiplayer)
-                    .Distinct()
-                    .OrderByDescending(m => m)
-                    .Select(m => m ? "Tak" : "Nie")
-                    .ToList();
+                filterValueComboBox.ItemsSource = new List<string> { "Tak", "Nie" };
                 break;
-            case "Data Wydania":
+            case "Rok Wydania":
                 filterValueComboBox.ItemsSource = businessLogic.GetAllGames()
-                    .Select(g => g.ReleaseYear)         
+                    .Select(g => g.ReleaseYear.ToString())         
                     .Distinct()                          
                     .OrderByDescending(year => year)    
                     .ToList();
                 break;
             case "Twórca":
-                filterValueComboBox.ItemsSource = businessLogic.GetAllProducers();
+                filterValueComboBox.ItemsSource = businessLogic.GetAllProducers()
+                    .Select(p => p.Name)
+                    .Distinct()
+                    .OrderBy(name => name)
+                    .ToList();
                 break;
             case "Gatunek":
                 filterValueComboBox.ItemsSource = GameGenreTranslator.GetTranslatedValues();
@@ -101,7 +90,16 @@ public partial class MainWindow : Window
         }
     }
 
-    private void GameApplyFilter(object sender, RoutedEventArgs e)
+    private void FilterValueComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (filterValueComboBox.SelectedItem == null || filterTypeComboBox.SelectedItem == null)
+        {
+            return;
+        }
+        GameApplyFilter();
+    }
+
+    private void GameApplyFilter()
     {
         var selectedType = (filterTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
         var filterValue = filterValueComboBox.SelectedItem as string;
@@ -115,7 +113,6 @@ public partial class MainWindow : Window
         switch (selectedType)
         {
             case "Wieloosobowy":
-                //Enum.TryParse(filterValue, out CPUSocketType socket);
                 bool isMultiplayer = true;
                 if (filterValue == "Nie")
                 {
@@ -123,7 +120,7 @@ public partial class MainWindow : Window
                 }
                 gamesListViewModel.RefreshList(businessLogic.GetAllGames().Where(g => g.Multiplayer == isMultiplayer));
                 break;
-            case "Data Wydania":
+            case "Rok Wydania":
                 gamesListViewModel.RefreshList(businessLogic.GetAllGames().Where(g => g.ReleaseYear == int.Parse(filterValue)));
                 break;
             case "Twórca":
@@ -135,6 +132,28 @@ public partial class MainWindow : Window
                 break;
         }
     }
+    
+    private void EnterApplyGameSearch(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            ApplyGameSearch(sender, e);
+
+            Keyboard.ClearFocus();
+        }
+    }
+
+    private void EnterApplyProducerSearch(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            ApplyProducerSearch(sender, e);
+
+            Keyboard.ClearFocus();
+        }
+    }
+
+    
 
     private void ApplyGameSearch(object sender, RoutedEventArgs e)
     {
@@ -148,7 +167,16 @@ public partial class MainWindow : Window
         gamesListViewModel.RefreshList(businessLogic.GetAllGames());
     }
 
-    private void ProducerApplyFilter(object sender, RoutedEventArgs e)
+    private void ProducerFilterTypeComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ProducerFilterValueComboBox.SelectedItem == null || ProducerFilterValueComboBox.SelectedItem == null)
+        {
+            return;
+        }
+        ProducerApplyFilter();
+    }
+
+    private void ProducerApplyFilter()
     {
         string address = ProducerFilterValueComboBox.SelectedItem as string;
         producerListViewModel.RefreshList(string.IsNullOrEmpty(address)
@@ -158,7 +186,7 @@ public partial class MainWindow : Window
 
     private void ApplyProducerSearch(object sender, RoutedEventArgs e)
     {
-        producerListViewModel.RefreshList(businessLogic.GetAllProducers().Where(p => p.Name.Equals(producerSearchField.Text)));
+        producerListViewModel.RefreshList(businessLogic.GetAllProducers().Where(p => p.Name.Contains(producerSearchField.Text,StringComparison.OrdinalIgnoreCase)));
     }
 
     private void RemoveFiltersProducer(object sender, RoutedEventArgs e)
@@ -172,70 +200,63 @@ public partial class MainWindow : Window
     {
         selectedGame = GamesList.SelectedItem as GamesViewModel;
     }
-
     private void AddGame(object sender, RoutedEventArgs e)
     {
-        var producer = businessLogic.GetAllProducers();
-        /*
-        NewCPU dialog = new NewCPU(manufacturers);
 
-        if (dialog.ShowDialog() == true)
+        IEnumerable<string> producers = businessLogic.GetAllProducers().Select(p => p.Name);
+
+        NewGame dialog = new NewGame(producers);
+
+        bool? result = dialog.ShowDialog();
+
+        try
         {
-            try
-            {
-                var manufacturerObj = _bl.GetAllManufacturers().First(m => m.Name == dialog.SelectedManufacturer);
+            var producerObj = businessLogic.GetAllProducers().First(p => p.Name == dialog.GameProducer);
 
-                ICPU newCpu = new CPU()
-                {
-                    Name = dialog.CPUName,
-                    Cores = dialog.Cores,
-                    Threads = dialog.Threads,
-                    BaseClockGHz = dialog.BaseClock,
-                    SocketType = dialog.CPUSocket,
-                    manufacturer = manufacturerObj
-                };
-
-                _bl.CreateCPU(newCpu);
-                RefreshAll();
-            }
-            catch (Exception ex)
+            IGame newGame = new Game()
             {
-                MessageBox.Show("Error adding CPU: " + ex.Message);
-            }
-        }*/
+                Name = dialog.GameName,
+                Genre = dialog.GameGenreEnum,
+                Producer = producerObj,
+                ReleaseYear = dialog.GameReleaseDate,
+            };
+
+            businessLogic.CreateNewGame(newGame);
+            Refresh();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Wystąpił błąd podczas dodawania gry: " + ex.Message);
+        }
     }
 
     private void EditGame(object sender, RoutedEventArgs e)
     {
         if (selectedGame == null) return;
 
-        IGame currentCpu = businessLogic.GetAllGames().Where(g => g.Id == selectedGame.GameId).First();
-        var producer = businessLogic.GetAllProducers();
-        
-        //TODO DOKOŃCZYĆ 2 OKNO
+        IGame currentGame = businessLogic.GetAllGames().Where(g => g.Id == selectedGame.GameId).First();
+        IEnumerable<string> producers = businessLogic.GetAllProducers().Select(p => p.Name);
 
-        /*NewCPU dialog = new NewCPU(manufacturers, currentCpu);
+        NewGame dialog = new NewGame(producers, currentGame);
 
         if (dialog.ShowDialog() == true)
         {
-            var manufacturerObj = _bl.GetAllManufacturers().First(m => m.Name == dialog.SelectedManufacturer);
+            var producerObj = businessLogic.GetAllProducers().First(p => p.Name == dialog.GameProducer);
 
-            currentCpu.Name = dialog.CPUName;
-            currentCpu.Cores = dialog.Cores;
-            currentCpu.Threads = dialog.Threads;
-            currentCpu.BaseClockGHz = dialog.BaseClock;
-            currentCpu.SocketType = dialog.CPUSocket;
-            currentCpu.manufacturer = manufacturerObj;
+            currentGame.Name = dialog.GameName;
+            currentGame.Genre = dialog.GameGenreEnum;
+            currentGame.Producer = producerObj;
+            currentGame.ReleaseYear = dialog.GameReleaseDate;
 
-            _bl.UpdateCPU(currentCpu);
-            RefreshAll();
-        }*/
+            businessLogic.UpdateGame(currentGame);
+            Refresh();
+        }
     }
 
     private void RemoveGame(object sender, RoutedEventArgs e)
     {
         if (selectedGame == null) return;
-        if (MessageBox.Show($"Remove {selectedGame.GameName}?", "Akceptuj", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+        if (MessageBox.Show($"Usunąć {selectedGame.GameName}?", "Akceptuj", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
         {
             businessLogic.DeleteGame(selectedGame.GameId);
             Refresh();
@@ -250,58 +271,47 @@ public partial class MainWindow : Window
 
     private void AddProducer(object sender, RoutedEventArgs e)
     {
-        //TODO DOKOŃCZYĆ 3 OKNO
 
-        /*NewManufacturer dialog = new NewManufacturer();
+        NewProducer dialog = new NewProducer();
         if (dialog.ShowDialog() == true)
         {
-            IManufacturer manufacturer = new Manufacturer()
+            IProducer producer = new Producer()
             {
-                Name = dialog.ManufacturerName,
-                Address = dialog.ManufacturerAddress
+                Name = dialog.ProducerName,
+                Address = dialog.ProducerAddress
             };
 
-            _bl.CreateManufacturer(manufacturer);
-            RefreshAll();
-        }*/
+            businessLogic.CreateNewProducer(producer);
+            Refresh();
+        }
     }
 
     private void EditProducer(object sender, RoutedEventArgs e)
     {
         if (selectedProducer == null) return;
 
-        IProducer current = businessLogic.GetAllProducers().Where(g => g.Id == selectedProducer.ProdcuerId).First();
+        IProducer producer = businessLogic.GetAllProducers().Where(g => g.Id == selectedProducer.ProducerId).First();
 
-        //TODO DOKOŃCZYĆ 3 OKNO
-
-        /*NewManufacturer dialog = new NewManufacturer(current);
+        NewProducer dialog = new NewProducer(producer);
 
         if (dialog.ShowDialog() == true)
         {
-            current.Name = dialog.ManufacturerName;
-            current.Address = dialog.ManufacturerAddress;
+            producer.Name = dialog.ProducerName;
+            producer.Address = dialog.ProducerAddress;
 
-            _bl.UpdateManufacturer(current);
-            RefreshAll();
-        }*/
+            businessLogic.UpdateProducer(producer);
+            Refresh();
+        }
     }
 
     private void RemoveProducer(object sender, RoutedEventArgs e)
     {
         if (selectedProducer == null) return;
-        if (MessageBox.Show("Remove manufacturer?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+        if (MessageBox.Show("Usunąć twórcę gry?", "Akceptuj", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
         {
-            businessLogic.DeleteProducer(selectedProducer.ProdcuerId);
+            businessLogic.DeleteProducer(selectedProducer.ProducerId);
             Refresh();
             selectedProducer = null;
         }
     }
-
-
-    private IEnumerable<string> GetMultiplayerOptions()
-    {
-        yield return "Tak";
-        yield return "Nie";
-    }
-
 }

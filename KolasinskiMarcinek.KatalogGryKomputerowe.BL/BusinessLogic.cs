@@ -13,8 +13,6 @@ public class BusinessLogic
 
     public BusinessLogic(IConfiguration configuration)
     {
-        // Pobieramy nazwę biblioteki z pliku konfiguracyjnego (wymóg 2.5)
-        // Szuka w appsettings.json (IConfiguration) lub App.config (ConfigurationManager)
         string libraryName =
             configuration["DAOLibraryName"]
             ?? System.Configuration.ConfigurationManager.AppSettings["DAOLibraryName"]!;
@@ -29,7 +27,6 @@ public class BusinessLogic
     {
         try
         {
-            // 1. Próbujemy znaleźć pełną ścieżkę do pliku DLL
             string? dllPath = FindDllPath(libraryName);
 
             if (dllPath == null)
@@ -37,10 +34,8 @@ public class BusinessLogic
                     $"Nie można odnaleźć pliku biblioteki: {libraryName} w żadnej znanej lokalizacji."
                 );
 
-            // 2. Ładowanie zestawu (assembly) z pełnej ścieżki
             Assembly assembly = Assembly.UnsafeLoadFrom(dllPath);
 
-            // Szukanie typu implementującego IDAO
             Type? daoType = assembly
                 .GetTypes()
                 .FirstOrDefault(t =>
@@ -67,13 +62,11 @@ public class BusinessLogic
 
     private string? FindDllPath(string libraryName)
     {
-        // 1. Sprawdź folder roboczy (tam gdzie jest .exe)
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;
         string localPath = Path.Combine(baseDir, libraryName);
         if (File.Exists(localPath))
             return localPath;
 
-        // 2. Jeśli nie ma, szukaj w folderach nadrzędnych (do 4 poziomów w górę)
         DirectoryInfo? currentDir = new DirectoryInfo(baseDir);
 
         for (int i = 0; i < 4; i++)
@@ -81,8 +74,6 @@ public class BusinessLogic
             if (currentDir == null)
                 break;
 
-            // Szukaj pliku rekurencyjnie w aktualnym folderze (np. w całym Solution)
-            // Ograniczamy się do folderów "bin", żeby nie skanować wszystkiego
             var files = currentDir.GetFiles(libraryName, SearchOption.AllDirectories);
             var bestMatch = files.OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
 
