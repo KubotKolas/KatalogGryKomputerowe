@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp"
         mc:Ignorable="d"
         Title="Katalog gier" Height="450" Width="800" Background="#151517">
+
     <TabControl Background="#151517" BorderBrush="#151517" BorderThickness="1">
         <TabItem Style="{DynamicResource TabItemStyle1}" Header="Gry Komputerowe" Foreground="#e4e4e5">
             <Grid>
@@ -61,10 +62,120 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0" Margin="0,0,10,0">
-                        <ListView Name="GamesList" Foreground="#e4e4e5" 
-                          ItemsSource="{Binding ElementName=AppWindow, Path=gamesListViewModel.gamesList}" 
-                          SelectionChanged="GameListSelectionChanged"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListView Name="GamesList" ItemsSource="{Binding ElementName=AppWindow, Path=gamesListViewModel.gamesList}"  SelectionChanged="GameListSelectionChanged" Foreground="#e4e4e5" Background="#1b1b1c">
+                            <ListView.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2c2c2e"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#e4e4e5"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#2c2c2e"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#e4e4e5"/>
+                                
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Background" Value="#1b1b1c"/>
+                                    <Setter Property="Foreground" Value="#e4e4e5"/>
+                                    <Setter Property="BorderBrush" Value="#2c2c2e"/>
+                                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                    <Setter Property="Padding" Value="8,0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                                <Grid>
+                                                    <Border Name="HeaderBorder"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="Center"
+                                                      RecognizesAccessKey="True"/>
+                                                    </Border>
+                                                    <Thumb x:Name="PART_HeaderGripper" 
+                                       HorizontalAlignment="Right"
+                                       Width="4"
+                                       Background="Transparent"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="HeaderBorder" Property="Background" Value="#2c2c2e"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="HeaderBorder" Property="Background" Value="#3c3c3e"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="#e4e4e5"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="0" SnapsToDevicePixels="true">
+                                                    <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#2c2c2e"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#2c2c2e"/>
+                                                    </Trigger>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsSelected" Value="true"/>
+                                                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter TargetName="Bd" Property="Background" Value="#2c2c2e"/>
+                                                    </MultiTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="{x:Type ScrollBar}">
+                                    <Setter Property="Background" Value="#1b1b1c"/>
+                                    <Setter Property="Foreground" Value="#2c2c2e"/>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                                <Grid>
+                                                    <Border Background="{TemplateBinding Background}"/>
+                                                    <Track x:Name="PART_Track">
+                                                        <Track.Thumb>
+                                                            <Thumb Background="#2c2c2e">
+                                                                <Thumb.Style>
+                                                                    <Style TargetType="{x:Type Thumb}">
+                                                                        <Setter Property="Background" Value="#2c2c2e"/>
+                                                                        <Style.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#3c3c3e"/>
+                                                                            </Trigger>
+                                                                            <Trigger Property="IsDragging" Value="True">
+                                                                                <Setter Property="Background" Value="#4c4c4e"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Thumb.Style>
+                                                            </Thumb>
+                                                        </Track.Thumb>
+                                                    </Track>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.Resources>
+
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Nazwa gry" Width="230" DisplayMemberBinding="{Binding GameName}" />
@@ -166,7 +277,109 @@
                         <ListView Name="ProducerList"  
                           ItemsSource="{Binding ElementName=AppWindow, Path=producerListViewModel.producerList}" 
                           SelectionChanged="ProducerListSelectionChanged"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible">
+                          ScrollViewer.VerticalScrollBarVisibility="Visible" Background="#1b1b1c">
+                            <ListView.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2c2c2e"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#e4e4e5"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#2c2c2e"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#e4e4e5"/>
+
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Background" Value="#1b1b1c"/>
+                                    <Setter Property="Foreground" Value="#e4e4e5"/>
+                                    <Setter Property="BorderBrush" Value="#2c2c2e"/>
+                                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                    <Setter Property="Padding" Value="8,0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                                <Grid>
+                                                    <Border Name="HeaderBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                                                    </Border>
+                                                    <Thumb x:Name="PART_HeaderGripper"  HorizontalAlignment="Right" Width="4" Background="Transparent"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="HeaderBorder" Property="Background" Value="#2c2c2e"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="HeaderBorder" Property="Background" Value="#3c3c3e"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="#e4e4e5"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="0" SnapsToDevicePixels="true">
+                                                    <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#2c2c2e"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#2c2c2e"/>
+                                                    </Trigger>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsSelected" Value="true"/>
+                                                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter TargetName="Bd" Property="Background" Value="#2c2c2e"/>
+                                                    </MultiTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="{x:Type ScrollBar}">
+                                    <Setter Property="Background" Value="#1b1b1c"/>
+                                    <Setter Property="Foreground" Value="#2c2c2e"/>
+
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                                <Grid>
+                                                    <Border Background="{TemplateBinding Background}"/>
+                                                    <Track x:Name="PART_Track">
+                                                        <Track.Thumb>
+                                                            <Thumb Background="#2c2c2e">
+                                                                <Thumb.Style>
+                                                                    <Style TargetType="{x:Type Thumb}">
+                                                                        <Setter Property="Background" Value="#2c2c2e"/>
+                                                                        <Style.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#3c3c3e"/>
+                                                                            </Trigger>
+                                                                            <Trigger Property="IsDragging" Value="True">
+                                                                                <Setter Property="Background" Value="#4c4c4e"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Thumb.Style>
+                                                            </Thumb>
+                                                        </Track.Thumb>
+                                                    </Track>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.Resources>
+
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Nazwa twórcy" Width="250" DisplayMemberBinding="{Binding ProducerName}"/>

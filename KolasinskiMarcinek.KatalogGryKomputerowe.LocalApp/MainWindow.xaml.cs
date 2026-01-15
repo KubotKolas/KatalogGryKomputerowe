@@ -219,6 +219,7 @@ public partial class MainWindow : Window
                 Genre = dialog.GameGenreEnum,
                 Producer = producerObj,
                 ReleaseYear = dialog.GameReleaseDate,
+                Multiplayer = dialog.GameMultiplayer
             };
 
             businessLogic.CreateNewGame(newGame);
@@ -247,6 +248,7 @@ public partial class MainWindow : Window
             currentGame.Genre = dialog.GameGenreEnum;
             currentGame.Producer = producerObj;
             currentGame.ReleaseYear = dialog.GameReleaseDate;
+            currentGame.Multiplayer = dialog.GameMultiplayer;
 
             businessLogic.UpdateGame(currentGame);
             Refresh();

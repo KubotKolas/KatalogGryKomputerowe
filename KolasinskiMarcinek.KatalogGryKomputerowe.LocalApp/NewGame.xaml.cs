@@ -76,6 +76,8 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp
 
         public int GameReleaseDate => int.TryParse(ReleaseDate.Text, out int year) ? year : 2026;
 
+        public bool GameMultiplayer => Multiplayer.Text == "Tak" ? true : false; 
+
         private void Confirm(object sender, RoutedEventArgs e)
         {
 
@@ -111,7 +113,10 @@ namespace KolasinskiMarcinek.KatalogGryKomputerowe.LocalApp
 
         private void Multiplayer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(Multiplayer.Text == "NIE")
+            {
 
+            }
         }
     }
 }
